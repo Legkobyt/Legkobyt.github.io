@@ -1,0 +1,69 @@
+------------------------------ MODULE Parking ------------------------------
+EXTENDS Naturals, Sequences, FiniteSets, TLC
+
+CONSTANTS 
+    Capacity,         
+    MaxAutoId        
+
+VARIABLES
+    parkingState,
+    cars
+
+PARKING_STATES == {"opened", "closed"}
+AutoIds == 0..MaxAutoId
+
+\* Inital state
+Init == 
+    /\ parkingState = "closed"
+    /\ cars = {}
+
+\* Definition for opening the parking
+OpenParking == 
+    /\ parkingState = "closed"
+    /\ parkingState' = "opened"
+    /\ UNCHANGED cars
+
+\* Definition for closing the parking
+CloseParking == 
+    /\ parkingState = "opened"
+    /\ Cardinality(cars) = 0
+    /\ parkingState' = "closed"
+    /\ UNCHANGED cars
+
+\* Definition for car arrival
+Arrival(autoId) ==  
+    /\ parkingState = "opened"
+    /\ autoId \in AutoIds
+    /\ autoId \notin cars
+    /\ Cardinality(cars) < Capacity
+    /\ cars' = cars \cup {autoId}
+    /\ UNCHANGED parkingState
+
+\* Definition for car departure
+Departure(autoId) == 
+    /\ parkingState = "opened"
+    /\ autoId \in cars
+    /\ cars' = cars \ {autoId}
+    /\ UNCHANGED parkingState
+
+\* Definition of possible next states
+Next ==  
+    \/ OpenParking
+    \/ CloseParking
+    \/ \E autoId \in AutoIds : Arrival(autoId)
+    \/ \E autoId \in cars : Departure(autoId)
+
+\* Definition of temporal formula 
+Spec == Init /\ [][Next]_<<parkingState, cars>> 
+
+CapacityInvariant == Cardinality(cars) <= Capacity
+
+ClosedInvariant == (parkingState = "closed" => Cardinality(cars) = 0)
+
+TypeInvariant == 
+    /\ parkingState \in PARKING_STATES
+    /\ cars \subseteq AutoIds
+
+\* Invariant definition
+Invariant == CapacityInvariant /\ ClosedInvariant /\ TypeInvariant
+=============================================================================

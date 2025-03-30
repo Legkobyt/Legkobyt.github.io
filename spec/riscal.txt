@@ -1,0 +1,49 @@
+val MAXID = 15;
+val CAP   = 10;
+
+type PS = ℕ[1];
+type Id = ℕ[MAXID];
+
+pred isClosed(ps:PS)  ⇔ ps = 0;
+pred isOpened(ps:PS)  ⇔ ps = 1;
+
+shared system ParkingSystem
+{
+  var ps  : PS;
+  var cars: Set[Id];
+
+  // Invariant definition
+  invariant |cars| ≤ CAP;
+  invariant isClosed(ps) ⇒ |cars| = 0;
+
+  // Inital state
+  init()
+  {
+    ps   := 0;
+    cars := ∅[Id];
+  }
+
+  // Definition for opening the parking
+  action openParking() with isClosed(ps);
+  {
+    ps := 1;
+  }
+
+  // Definition for closing the parking
+  action closeParking() with isOpened(ps) ∧ |cars| = 0;
+  {
+    ps := 0;
+  }
+
+  // Definition for car arrival
+  action arrival(i: Id) with isOpened(ps) ∧ ¬(i ∈ cars) ∧ |cars| < CAP;
+  {
+    cars := cars ∪ {i};
+  }
+
+  // Definition for car departure
+  action departure(i: Id) with isOpened(ps) ∧ i ∈ cars;
+  {
+    cars := cars \ {i};
+  }
+}

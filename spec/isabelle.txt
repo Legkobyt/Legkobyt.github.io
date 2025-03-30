@@ -1,0 +1,80 @@
+theory Parking
+  imports Main
+begin
+
+  datatype ParkState = Open | Closed
+  
+  record parking_state =
+    parkStatus :: ParkState
+    cars      :: "nat set"
+  
+  locale ParkingDefs =
+    fixes Capacity :: nat
+      and MaxCarId :: nat
+    assumes CapPositive: "Capacity > 0"
+      and MaxIdPositive: "MaxCarId > 0"
+  begin
+  
+  definition CarIds :: "nat set" where
+    "CarIds = {0..MaxCarId}"
+  
+  (* Initial state *)
+  definition is_init :: "parking_state ⇒ bool" where
+    "is_init s ≡ 
+      parkStatus s = Closed ∧ 
+      cars s = {}"
+  
+  (* Definition for opening the parking *)
+  definition openParking :: "parking_state ⇒ parking_state ⇒ bool" where
+    "openParking s s' ≡ 
+       parkStatus s = Closed ∧
+       parkStatus s' = Open ∧
+       cars s' = cars s"
+  
+  (* Definition for closing the parking *)
+  definition closeParking :: "parking_state ⇒ parking_state ⇒ bool" where
+    "closeParking s s' ≡ 
+       parkStatus s = Open ∧
+       cars s = {} ∧
+       parkStatus s' = Closed ∧
+       cars s' = cars s"
+  
+  (* Definition for car arrival *)
+  definition arrival :: "nat ⇒ parking_state ⇒ parking_state ⇒ bool" where
+    "arrival carId s s' ≡
+       parkStatus s = Open ∧
+       carId ∈ CarIds ∧
+       carId ∉ cars s ∧
+       card (cars s) < Capacity ∧
+       parkStatus s' = parkStatus s ∧
+       cars s' = cars s ∪ {carId}"
+  
+  (* Definition for car departure *)
+  definition departure :: "nat ⇒ parking_state ⇒ parking_state ⇒ bool" where
+    "departure carId s s' ≡
+       parkStatus s = Open ∧
+       carId ∈ cars s ∧
+       parkStatus s' = parkStatus s ∧
+       cars s' = cars s - {carId}"
+  
+  (* Definition of possible next states *)
+  definition Next :: "parking_state ⇒ parking_state ⇒ bool" where
+    "Next s s' ≡ 
+       openParking s s' ∨
+       closeParking s s' ∨
+       (∃carId ∈ CarIds. arrival carId s s') ∨
+       (∃carId. carId ∈ cars s ∧ departure carId s s')"
+  
+  definition capacityInvariant :: "parking_state ⇒ bool" where
+    "capacityInvariant s ≡ card (cars s) ≤ Capacity"
+  
+  definition closedInvariant :: "parking_state ⇒ bool" where
+    "closedInvariant s ≡ (parkStatus s = Closed ⟶ cars s = {})"
+  
+  (* Invariant definition *)
+  definition invariant :: "parking_state ⇒ bool" where
+    "invariant s ≡ capacityInvariant s ∧ closedInvariant s"
+  
+  end
+
+end

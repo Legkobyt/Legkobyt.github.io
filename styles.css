@@ -1,0 +1,152 @@
+body {
+  margin: 0;
+  font-family: monospace;
+  background-color: #f8f8f8;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  text-align: center;
+}
+
+.formal-method-name {
+  background-color: #f0f0f0;
+  padding: 5px 10px;
+  border-left: 4px solid #007acc;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.editor-container {
+  max-width: 800px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 10px;
+  min-height: 300px;
+}
+
+.editor-line {
+  display: flex;
+  line-height: 1.4em;
+  white-space: pre;
+}
+
+.line-number {
+  width: 30px;
+  text-align: right;
+  margin-right: 10px;
+  user-select: none;
+  color: #999;
+}
+
+.line-code {
+  flex: 1;
+}
+
+.highlight {
+  color: #d14;
+  font-weight: bold;
+}
+
+.pagination {
+  max-width: 800px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+}
+
+.pagination.single-button {
+  justify-content: center;
+}
+
+
+.pagination button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pagination button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.pagination span {
+  min-width: 120px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  color: #333;
+}
+
+.b-comment {
+  color: #1e9123c2;
+}
+
+
+.b-reserved {
+  color: #003366;
+  font-weight: bold;
+}
+
+.type {
+  color: #006600;
+  font-style: italic;
+}
+
+.b-operator {
+  color: #990000;
+}
+
+.coq-reserved {
+  color: #660066;
+  font-weight: bold;
+}
+
+.coq-operator {
+  color: #cc00cc;
+  font-weight: bold;
+}
+
+.coq-comment {
+  color: #e99415c2;
+}
+
+.isabelle-reserved {
+  color: #3fbd20;
+  font-weight: bold;
+}
+
+.isabelle-operator {
+  color: #1d7bd8;
+}
+
+.riscal-reserved {
+  color: #660066;
+}
+
+.tla-reserved {
+  color: #660066;
+}
+
+.vdm-literal {
+  color: #1d7bd8;
+}
+
+.vdm-reserved {
+  color: #a01313;
+}
+
+.vdm-operator{
+  color:  #1d7bd8;
+}

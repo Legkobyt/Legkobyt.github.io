@@ -1,0 +1,47 @@
+values
+  Capacity : nat = 10;
+  MaxAutoId : nat = 15;
+
+types
+  AutoId = nat1;
+  ParkingState = <opened> | <closed>;
+
+state ParkingSystem of
+  parkingState : ParkingState
+  cars : set of AutoId
+
+-- Invariant definition
+inv mk_ParkingSystem(parkingState, cars) ==
+  card cars <= Capacity and (parkingState = <closed> => card cars = 0)
+
+-- Inital state
+init p == p = mk_ParkingSystem(<closed>, {})
+end
+
+operations
+
+-- Definition for opening the parking
+  OpenParking()
+    ext wr parkingState : ParkingState wr cars : set of AutoId
+    pre parkingState = <closed>
+    post parkingState = <opened> and cars = cars~;
+
+-- Definition for closing the parking
+  CloseParking()
+    ext wr parkingState : ParkingState wr cars : set of AutoId
+    pre parkingState = <opened> and card cars = 0
+    post (parkingState = <closed> and cars = {});
+
+-- Definition for car arrival
+  Arrival(autoId : AutoId)
+    ext wr parkingState : ParkingState wr cars : set of AutoId
+    pre parkingState = <opened> and
+        autoId not in set cars and
+        card cars < Capacity
+    post (cars = cars~ union {autoId} and parkingState = parkingState~);
+
+-- Definition for car departure
+  Departure(autoId : AutoId)
+    ext wr parkingState : ParkingState wr cars : set of AutoId
+    pre parkingState = <opened> and autoId in set cars
+    post (cars = cars~ \ {autoId} and parkingState = parkingState~);

@@ -1,0 +1,62 @@
+MACHINE Parking(capacity)
+CONSTRAINTS capacity ∈ NAT1
+VARIABLES parkingState, cars
+SEES ParkingST
+
+// Invariant definition
+INVARIANT
+    parkingState ∈ PARKING_STATE ∧
+    cars ∈ FIN(NAT) ∧
+    card(cars) ≤ capacity ∧
+    (parkingState = closed ⇒ card(cars) = 0)
+
+// Initial state
+INITIALISATION
+    cars := ∅ ||
+    parkingState := closed
+OPERATIONS
+
+    // Definition for opening the parking
+    openParking =
+        BEGIN
+            parkingState := opened
+        END;
+
+    // Definition for closing the parking
+    ok ← closeParking =
+        PRE
+            card(cars) = 0
+        THEN
+            parkingState := closed ||
+            ok := TRUE
+        END;
+
+    // Definition for car arrival
+    ok ← arrival(autoId) =
+        PRE
+            autoId ∈ NAT ∧
+            autoId ∉ cars ∧
+            parkingState = opened ∧
+            card(cars) < capacity
+        THEN
+            cars := cars ∪ {autoId} ||
+            ok := TRUE
+        END;
+
+    // Definition for car departure
+    ok ← departure(autoId) =
+        PRE
+            autoId ∈ NAT ∧
+            autoId ∈ cars ∧
+            parkingState = opened
+        THEN
+            cars := cars - {autoId} ||
+            ok := TRUE
+        END
+END
+
+//This is separate machine for defining parking state
+MACHINE
+    ParkingST
+SETS PARKING_STATE = { opened, closed }
+END
