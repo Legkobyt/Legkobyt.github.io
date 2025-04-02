@@ -193,7 +193,7 @@ const syntaxHighlightingRules = {
 
   Riscal: {
     reserved: [
-      "val", "type", "pred", "shared", "system", "var", 
+      "val", "type", "pred", "shared", "system", "var",
       "invariant", "init", "action", "with"
     ],
     types: [
@@ -252,17 +252,17 @@ const syntaxHighlightingRules = {
       "Cardinality"
     ],
     operators: [
-      " = ", " == ", 
-      "\\in", "\\notin", 
-      "\\cup", 
-      "\\subseteq", 
+      " = ", " == ",
+      "\\in", "\\notin",
+      "\\cup",
+      "\\subseteq",
       "/\\", "\\/",
-      "\\E", "\\A", 
-      "=>", 
-      "'", 
+      "\\E", "\\A",
+      "=>",
+      "'",
       "<=", " >= ",
-      "_<<", ">> ", 
-      "::", 
+      "_<<", ">> ",
+      "::",
       "\\",
     ],
     highlight: function (line) {
@@ -302,9 +302,9 @@ const syntaxHighlightingRules = {
 
   VDM: {
     reserved: [
-      "values", "types", "state", "inv", 
-      "init", "end", "operations", 
-      "pre", "post", "ext", "wr", 
+      "values", "types", "state", "inv",
+      "init", "end", "operations",
+      "pre", "post", "ext", "wr",
     ],
     types: [
       "nat", "nat1", "set"
@@ -421,11 +421,16 @@ function renderStartPage() {
   container.innerHTML = `
     <h2>Welcome!</h2>
 
-    <p>
-      My bachelor's thesis explores the use of formal methods to develop verifiable
-      software applications. By “formal methods”, we mean techniques of verifying
-      programs with <srtong>mathematical formulas and proofs</strong>.
-    </p>
+<p>
+  My bachelor's thesis explores the use of formal methods to develop verifiable
+  software applications.
+</p>
+<p>
+  Formal methods are mathematically-based techniques used to specify, develop,
+  and verify both software and hardware systems. They enable designers to rigorously
+  prove the correctness, safety, and reliability of a system, making them particularly
+  valuable in safety-critical domains such as aerospace, medical devices, and finance.
+</p>
 
     <p>
       In this study, you will review <strong>6</strong> specifications describing the same “Parking” system,
@@ -516,7 +521,7 @@ function updatePagination() {
     prevBtn.style.margin = '';
     nextBtn.style.margin = '';
     paginationContainer.classList.remove('single-button');
-    
+
     if (currentIndex === 1) {
       prevBtn.textContent = 'Return to start';
     } else {
