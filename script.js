@@ -431,32 +431,33 @@ function renderStartPage() {
   prove the correctness, safety, and reliability of a system, making them particularly
   valuable in safety-critical domains such as aerospace, medical devices, and finance.
 </p>
-
     <p>
       In this study, you will review <strong>6</strong> specifications describing the same “Parking” system,
       each written with a different formal method. The goal is to understand how
       accessible and comprehensible these specifications are for developers.
       After you have read them, you will be asked to fill out a brief questionnaire.
     </p>
-
     <p>
       The “Parking” system manages a limited number of spaces and includes four main operations:
     </p>
-
     <ul>
-      <li>Opening the car park</li>
-      <li>Closing the car park</li>
+      <li>Opening the car parking</li>
+      <li>Closing the car parking</li>
       <li>A car arrives</li>
       <li>A car leaves</li>
     </ul>
-
-    <p>
-      Each specification also highlights the notion of an <strong>invariant</strong> — a
-      system constraint that must hold in every state. For instance, “<em>When the car park
-      is closed, there should be no cars present</em>.” As you review each file, pay attention
-      to how the operations and invariants are described in the different formal notations.
-    </p>
-
+<p>
+  Each specification also highlights the notion of an <strong>invariant</strong> —
+  a system constraint that must hold in every state. You will encounter 2 main
+  invariants :
+  <ul> 
+    <li><em>The number of parked cars never exceeds the parking’s capacity.</em></li>
+    <li><em>When the parking lot is closed, there are no cars present.</em></li>
+  </ul> 
+  As you review
+  each code, pay attention to how the operations and invariants are described in the
+  different formal notations.
+</p>
     <p>
       Please click <strong>"Go to specs"</strong> to begin reviewing the specification files
       in a random order.

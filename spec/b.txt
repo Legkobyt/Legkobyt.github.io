@@ -5,9 +5,13 @@ SEES ParkingST
 
 // Invariant definition
 INVARIANT
+// The parking lot should only be in two states
     parkingState ∈ PARKING_STATE ∧
+// The cars collection belongs to the boundary set of natural numbers
     cars ∈ FIN(NAT) ∧
+// The number of cars in the parking lot cannot exceed its capacity.
     card(cars) ≤ capacity ∧
+// When the car park is closed, there should be no cars present.
     (parkingState = closed ⇒ card(cars) = 0)
 
 // Initial state

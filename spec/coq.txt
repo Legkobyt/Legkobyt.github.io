@@ -5,63 +5,64 @@ Require Import Coq.Arith.Peano_dec.
 Require Import Bool.
 
 Inductive ParkingState : Type :=
-  | Open
-  | Closed.
+  | opened
+  | closed.
 
 Record parking_state : Type := mkState {
-  parkingStatus : ParkingState;
+  parkingState : ParkingState;
   cars : list nat
 }.
 
-Definition Capacity : nat := 10.
+Definition capacity : nat := 10.
 Definition MaxCarId : nat := 15.
 
 Definition is_valid_car (carId : nat) : bool :=
   carId <=? MaxCarId.
 
+(* The number of cars in the parking lot cannot exceed its capacity *)
 Definition has_space (s : parking_state) : bool :=
-  length (cars s) <? Capacity.
+  length (cars s) <? capacity.
 
 Definition is_parked (carId : nat) (s : parking_state) : bool :=
   List.existsb (Nat.eqb carId) (cars s).
 
 (* Definition for opening the parking *)
 Definition openParking (s : parking_state) : option parking_state :=
-  match parkingStatus s with
-  | Closed => Some (mkState Open (cars s))
-  | Open => None
+  match parkingState s with
+  | closed => Some (mkState opened (cars s))
+  | opened => None
   end.
 
 (* Definition for closing the parking *)
 Definition closeParking (s : parking_state) : option parking_state :=
-  match parkingStatus s, cars s with
-  | Open, [] => Some (mkState Closed [])
+  match parkingState s, cars s with
+  | opened, [] => Some (mkState closed [])
   | _, _ => None
   end.
 
 Definition is_open (status : ParkingState) : bool :=
   match status with
-  | Open => true
-  | Closed => false
+  | opened => true
+  | closed => false
   end.
 
 (* Definition for car arrival *)
 Definition arrival (carId : nat) (s : parking_state) : option parking_state :=
-  if (is_open (parkingStatus s)) &&
+  if (is_open (parkingState s)) &&
      (is_valid_car carId) &&
      (negb (is_parked carId s)) &&
      (has_space s)
-  then Some (mkState (parkingStatus s) (carId :: cars s))
+  then Some (mkState (parkingState s) (carId :: cars s))
   else None.
 
 (* Definition for car departure *)
 Definition departure (carId : nat) (s : parking_state) : option parking_state :=
-  if (is_open (parkingStatus s)) && (is_parked carId s)
-  then Some (mkState (parkingStatus s) (filter (fun x => negb (Nat.eqb x carId)) (cars s)))
+  if (is_open (parkingState s)) && (is_parked carId s)
+  then Some (mkState (parkingState s) (filter (fun x => negb (Nat.eqb x carId)) (cars s)))
   else None.
 
 Definition can_arrive (carId : nat) (s : parking_state) : bool :=
-  (is_open (parkingStatus s)) &&
+  (is_open (parkingState s)) &&
   (is_valid_car carId) &&
   (negb (is_parked carId s)) &&
   (has_space s).

@@ -2,68 +2,71 @@
 EXTENDS Naturals, Sequences, FiniteSets, TLC
 
 CONSTANTS 
-    Capacity,         
-    MaxAutoId        
+    capacity,
+    maxCarId
 
 VARIABLES
     parkingState,
     cars
 
 PARKING_STATES == {"opened", "closed"}
-AutoIds == 0..MaxAutoId
+AutoIds == 0..maxCarId
 
-\* Inital state
-Init == 
+
+\* Initial state
+init == 
     /\ parkingState = "closed"
     /\ cars = {}
 
-\* Definition for opening the parking
-OpenParking == 
+\* Definition for opening the parking:
+openParking == 
     /\ parkingState = "closed"
     /\ parkingState' = "opened"
     /\ UNCHANGED cars
 
 \* Definition for closing the parking
-CloseParking == 
+closeParking == 
     /\ parkingState = "opened"
     /\ Cardinality(cars) = 0
     /\ parkingState' = "closed"
     /\ UNCHANGED cars
 
-\* Definition for car arrival
-Arrival(autoId) ==  
+\* Definition for car arrival:
+arrival(autoId) ==  
     /\ parkingState = "opened"
-    /\ autoId \in AutoIds
-    /\ autoId \notin cars
-    /\ Cardinality(cars) < Capacity
-    /\ cars' = cars \cup {autoId}
+    /\ autoId ∈ AutoIds
+    /\ autoId ∉ cars
+    /\ Cardinality(cars) < capacity
+    /\ cars' = cars ∪ {autoId}
     /\ UNCHANGED parkingState
 
-\* Definition for car departure
-Departure(autoId) == 
+\* Definition for car departure:
+departure(autoId) == 
     /\ parkingState = "opened"
-    /\ autoId \in cars
+    /\ autoId ∈ cars
     /\ cars' = cars \ {autoId}
     /\ UNCHANGED parkingState
 
+
 \* Definition of possible next states
-Next ==  
-    \/ OpenParking
-    \/ CloseParking
-    \/ \E autoId \in AutoIds : Arrival(autoId)
-    \/ \E autoId \in cars : Departure(autoId)
+next ==  
+    \/ openParking
+    \/ closeParking
+    \/ \E autoId ∈ AutoIds : arrival(autoId)
+    \/ \E autoId ∈ cars : departure(autoId)
 
-\* Definition of temporal formula 
-Spec == Init /\ [][Next]_<<parkingState, cars>> 
+\*The number of parked cars cannot exceed capacity.
+capacityInvariant == Cardinality(cars) ≤ capacity
 
-CapacityInvariant == Cardinality(cars) <= Capacity
+\* When the parking lot is closed, there should be no cars.
+closedInvariant == (parkingState = "closed" => Cardinality(cars) = 0)
 
-ClosedInvariant == (parkingState = "closed" => Cardinality(cars) = 0)
-
-TypeInvariant == 
-    /\ parkingState \in PARKING_STATES
-    /\ cars \subseteq AutoIds
+\* The parking lot should only be in two states
+\* The cars collection belongs to the boundary set of natural numbers
+typeInvariant == 
+    /\ parkingState ∈ PARKING_STATES
+    /\ cars ⊆ AutoIds
 
 \* Invariant definition
-Invariant == CapacityInvariant /\ ClosedInvariant /\ TypeInvariant
+invariant == capacityInvariant /\ closedInvariant /\ typeInvariant
 =============================================================================

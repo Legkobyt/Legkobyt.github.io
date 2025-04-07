@@ -2,16 +2,16 @@ theory Parking
   imports Main
 begin
 
-  datatype ParkState = Open | Closed
+  datatype ParkingState = opened | closed
   
   record parking_state =
-    parkStatus :: ParkState
-    cars      :: "nat set"
+    parkingState :: ParkingState
+    cars         :: "nat set"
   
   locale ParkingDefs =
-    fixes Capacity :: nat
+    fixes capacity :: nat
       and MaxCarId :: nat
-    assumes CapPositive: "Capacity > 0"
+    assumes CapPositive: "capacity > 0"
       and MaxIdPositive: "MaxCarId > 0"
   begin
   
@@ -21,40 +21,40 @@ begin
   (* Initial state *)
   definition is_init :: "parking_state ⇒ bool" where
     "is_init s ≡ 
-      parkStatus s = Closed ∧ 
+      parkingState s = closed ∧ 
       cars s = {}"
   
   (* Definition for opening the parking *)
   definition openParking :: "parking_state ⇒ parking_state ⇒ bool" where
     "openParking s s' ≡ 
-       parkStatus s = Closed ∧
-       parkStatus s' = Open ∧
+       parkingState s = closed ∧
+       parkingState s' = opened ∧
        cars s' = cars s"
   
   (* Definition for closing the parking *)
   definition closeParking :: "parking_state ⇒ parking_state ⇒ bool" where
     "closeParking s s' ≡ 
-       parkStatus s = Open ∧
+       parkingState s = opened ∧
        cars s = {} ∧
-       parkStatus s' = Closed ∧
+       parkingState s' = closed ∧
        cars s' = cars s"
   
   (* Definition for car arrival *)
   definition arrival :: "nat ⇒ parking_state ⇒ parking_state ⇒ bool" where
     "arrival carId s s' ≡
-       parkStatus s = Open ∧
+       parkingState s = opened ∧
        carId ∈ CarIds ∧
        carId ∉ cars s ∧
-       card (cars s) < Capacity ∧
-       parkStatus s' = parkStatus s ∧
+       card (cars s) < capacity ∧
+       parkingState s' = parkingState s ∧
        cars s' = cars s ∪ {carId}"
   
   (* Definition for car departure *)
   definition departure :: "nat ⇒ parking_state ⇒ parking_state ⇒ bool" where
     "departure carId s s' ≡
-       parkStatus s = Open ∧
+       parkingState s = opened ∧
        carId ∈ cars s ∧
-       parkStatus s' = parkStatus s ∧
+       parkingState s' = parkingState s ∧
        cars s' = cars s - {carId}"
   
   (* Definition of possible next states *)
@@ -65,11 +65,13 @@ begin
        (∃carId ∈ CarIds. arrival carId s s') ∨
        (∃carId. carId ∈ cars s ∧ departure carId s s')"
   
+  (* The number of cars in the parking lot cannot exceed its capacity *)
   definition capacityInvariant :: "parking_state ⇒ bool" where
-    "capacityInvariant s ≡ card (cars s) ≤ Capacity"
+    "capacityInvariant s ≡ card (cars s) ≤ capacity"
   
+  (* When the parking lot is closed, there should be no cars present *)
   definition closedInvariant :: "parking_state ⇒ bool" where
-    "closedInvariant s ≡ (parkStatus s = Closed ⟶ cars s = {})"
+    "closedInvariant s ≡ (parkingState s = closed ⟶ cars s = {})"
   
   (* Invariant definition *)
   definition invariant :: "parking_state ⇒ bool" where

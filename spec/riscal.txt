@@ -1,48 +1,51 @@
-val MAXID = 15;
-val CAP   = 10;
+val MaxCarId = 15;
+val capacity = 10;
 
 type PS = ℕ[1];
-type Id = ℕ[MAXID];
+type Id = ℕ[MaxCarId];
 
-pred isClosed(ps:PS)  ⇔ ps = 0;
-pred isOpened(ps:PS)  ⇔ ps = 1;
+pred isClosed(parkingState: PS) ⇔ parkingState = 0;
+pred isOpened(parkingState: PS) ⇔ parkingState = 1;
 
 shared system ParkingSystem
 {
-  var ps  : PS;
+
+  var parkingState : PS;
   var cars: Set[Id];
 
   // Invariant definition
-  invariant |cars| ≤ CAP;
-  invariant isClosed(ps) ⇒ |cars| = 0;
+  // The number of cars in the parking lot cannot exceed its capacity.
+  invariant |cars| ≤ capacity;
+  // When the parking lot is closed, there should be no cars present.
+  invariant isClosed(parkingState) ⇒ |cars| = 0;
 
-  // Inital state
+  // Initial state:
   init()
   {
-    ps   := 0;
+    parkingState := 0;
     cars := ∅[Id];
   }
 
-  // Definition for opening the parking
-  action openParking() with isClosed(ps);
+  // Definition for opening the parking:
+  action openParking() with isClosed(parkingState);
   {
-    ps := 1;
+    parkingState := 1;
   }
 
-  // Definition for closing the parking
-  action closeParking() with isOpened(ps) ∧ |cars| = 0;
+  // Definition for closing the parking:
+  action closeParking() with isOpened(parkingState) ∧ |cars| = 0;
   {
-    ps := 0;
+    parkingState := 0;
   }
 
-  // Definition for car arrival
-  action arrival(i: Id) with isOpened(ps) ∧ ¬(i ∈ cars) ∧ |cars| < CAP;
+  // Definition for car arrival:
+  action arrival(i: Id) with isOpened(parkingState) ∧ ¬(i ∈ cars) ∧ |cars| < capacity;
   {
     cars := cars ∪ {i};
   }
 
-  // Definition for car departure
-  action departure(i: Id) with isOpened(ps) ∧ i ∈ cars;
+  // Definition for car departure:
+  action departure(i: Id) with isOpened(parkingState) ∧ i ∈ cars;
   {
     cars := cars \ {i};
   }
