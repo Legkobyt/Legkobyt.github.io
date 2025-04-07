@@ -457,6 +457,15 @@ function renderStartPage() {
   As you review
   each code, pay attention to how the operations and invariants are described in the
   different formal notations.
+    <p>
+      The main variables that appear in the formal specifications include:
+    </p>
+    <ul>
+      <li><strong>capacity</strong> – The maximum number of cars that can be parked at once.</li>
+      <li><strong>maxCarId</strong> – The highest valid identifier a car can have.</li>
+      <li><strong>parkingState</strong> – Either <code>"opened"</code> or <code>"closed"</code>, indicating the current status of the parking lot.</li>
+      <li><strong>cars</strong> – A collection or set of currently parked car identifiers.</li>
+    </ul>
 </p>
     <p>
       Please click <strong>"Go to specs"</strong> to begin reviewing the specification files
