@@ -73,7 +73,7 @@ const syntaxHighlightingRules = {
     }
   },
 
-  Coq: {
+  "Coq (Rocq)": {
     reserved: [
       "Require", "Import", "Export", "Section", "Inductive",
       "Definition", "Record", "Type", "list", "option",
