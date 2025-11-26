@@ -9,7 +9,7 @@ const filePaths = [
 
 const languageMapping = {
   'b.txt': 'B',
-  'coq.txt': 'Coq (Rocq)',
+  'coq.txt': 'Coq',
   'isabelle.txt': 'Isabelle',
   'riscal.txt': 'Riscal',
   'tla.txt': 'TLA',
@@ -73,7 +73,7 @@ const syntaxHighlightingRules = {
     }
   },
 
-  "Coq (Rocq)": {
+  "Coq": {
     reserved: [
       "Require", "Import", "Export", "Section", "Inductive",
       "Definition", "Record", "Type", "list", "option",
