@@ -9,7 +9,7 @@ const filePaths = [
 
 const languageMapping = {
   'b.txt': 'B',
-  'coq.txt': 'Coq',
+  'coq.txt': 'Coq (Rocq)',
   'isabelle.txt': 'Isabelle',
   'riscal.txt': 'Riscal',
   'tla.txt': 'TLA',
@@ -18,7 +18,7 @@ const languageMapping = {
 
 const methodNameMapping = {
   'b.txt': 'B method',
-  'coq.txt': 'Coq',
+  'coq.txt': 'Coq (Rocq)',
   'isabelle.txt': 'Isabelle/HOL',
   'riscal.txt': 'RISCAL',
   'tla.txt': 'TLA+',
