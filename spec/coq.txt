@@ -67,6 +67,12 @@ Definition can_arrive (carId : nat) (s : parking_state) : bool :=
   (negb (is_parked carId s)) &&
   (has_space s).
 
+(* Can a car depart? *)
+Definition can_depart (carId : nat) (s : parking_state) : bool :=
+  (is_open (parkingState s)) && (is_parked carId s).
+
+
+
 (* Definition of possible next states *)
 Definition Next (s : parking_state) : option parking_state :=
   match openParking s with
@@ -77,7 +83,11 @@ Definition Next (s : parking_state) : option parking_state :=
     | None =>
       match (List.find (fun carId => can_arrive carId s) (seq 0 MaxCarId)) with
       | Some carId => arrival carId s
-      | None => None
+      | None =>
+        match (List.find (fun carId => can_depart carId s) (cars s)) with
+        | Some carId => departure carId s
+        | None => None
+        end
       end
     end
   end.
